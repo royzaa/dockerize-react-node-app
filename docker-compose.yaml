@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  backend:
+    # image: 'goals'
+    build: ./backend
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    #   args:
+    #     - name=value
+    ports:
+      - '80:80'
+    volumes:
+      - /app/node_modules
+      - logs:/app/logs
+      - ./backend:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - mongodb
+
+  frontend:
+    image: 'react'
+    # container_name: name
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./.env
+volumes:
+  data:
+  logs:

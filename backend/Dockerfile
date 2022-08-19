@@ -1,4 +1,4 @@
-FROM node
+FROM node:14-alpine
 
 WORKDIR /app
 
@@ -6,7 +6,8 @@ COPY package.json .
 
 RUN npm install
 RUN mkdir -p /app/logs \
- && chown -R node /app/logs
+ && chown -R node:node /app/logs \
+ && chmod 755 /app/logs
 
 COPY . .
 
@@ -18,4 +19,4 @@ ENV MONGODB_PASSWORD password
 
 EXPOSE $PORT
 
-CMD [ "npm", "start" ]
+CMD ["npm", "start" ]
